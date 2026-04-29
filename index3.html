@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abako Gestão | Enterprise Solutions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #059669;
+            --bg-light: #f8fafc;
+            --surface: rgba(255, 255, 255, 0.8);
+            --border: rgba(15, 23, 42, 0.08);
+            --text-main: #0f172a;
+            --text-secondary: #64748b;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            
+            /* Cores de Marca para os Fundos */
+            --youtube-bg: #FF0000;
+            --instagram-bg: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            --facebook-bg: #1877F2;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 80px 20px 160px 20px;
+        }
+
+        #matrix-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            opacity: 0.1;
+        }
+
+        /* BOTÃO DE MÚSICA */
+        .music-control { position: fixed; top: 30px; right: 30px; z-index: 2000; }
+        #play-music-btn {
+            background: var(--surface); border: 1px solid var(--border);
+            color: var(--text-main); width: 48px; height: 48px; border-radius: 14px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            backdrop-filter: blur(10px); transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        /* CONTAINER PRINCIPAL */
+        .container {
+            width: 100%; max-width: 420px; text-align: center;
+            background: var(--surface); padding: 40px 24px; border-radius: 28px;
+            border: 1px solid var(--border); backdrop-filter: blur(20px);
+            box-shadow: var(--shadow);
+        }
+
+        .profile-header { display: flex; align-items: center; justify-content: flex-start; gap: 18px; margin-bottom: 32px; }
+        .profile-img { width: 68px; height: 68px; border-radius: 20px; border: 1px solid var(--border); background: #fff; padding: 3px; object-fit: cover; }
+        .profile h1 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin: 0; }
+        .profile p { font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 600; letter-spacing: 0.8px; }
+
+        .video-wrapper {
+            position: relative; width: 100%; padding-bottom: 56.25%; height: 0;
+            margin-bottom: 32px; border-radius: 20px; overflow: hidden; 
+            border: 1px solid var(--border); box-shadow: var(--shadow);
+        }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
+        /* BOTÕES DE LINK COM FUNDO COLORIDO */
+        .links-area { display: flex; flex-direction: column; gap: 14px; }
+        .link-button {
+            display: flex; align-items: center; justify-content: space-between;
+            text-decoration: none; padding: 18px 24px; border-radius: 16px; 
+            font-weight: 600; font-size: 0.95rem; color: #ffffff;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .link-button:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); filter: brightness(1.1); }
+
+        .link-youtube { background: var(--youtube-bg); }
+        .link-instagram { background: var(--instagram-bg); }
+        .link-facebook { background: var(--facebook-bg); }
+
+        .link-button .label { display: flex; align-items: center; gap: 12px; }
+        .link-button i { font-size: 1.2rem; }
+        .link-button .fa-chevron-right { font-size: 0.75rem; opacity: 0.7; }
+
+        /* CARROSSEL RODAPÉ */
+        .ads-carousel-viewport {
+            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+            width: calc(100% - 40px); max-width: 500px; height: 95px;
+            z-index: 1000; overflow: hidden; border-radius: 24px;
+            background: #ffffff; border: 1px solid var(--border);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08); display: flex;
+        }
+        .ads-track { display: flex; height: 100%; transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .ad-card { min-width: 100%; height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; text-decoration: none; }
+        .ad-icon-box { width: 48px; height: 48px; background: #f0fdf4; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: var(--primary-color); border: 1px solid #dcfce7; }
+        .ad-texts h4 { color: var(--text-main); font-size: 0.9rem; font-weight: 700; margin: 0; }
+        .ad-texts p { color: var(--text-secondary); font-size: 0.75rem; }
+        .ad-cta-btn { background: var(--text-main); color: #fff; padding: 12px 20px; border-radius: 12px; font-size: 0.8rem; font-weight: 700; }
+
+        footer { margin-top: 40px; font-size: 0.7rem; color: var(--text-secondary); }
+
+        @media (max-width: 480px) { .ad-cta-btn span { display: none; } }
+    </style>
+</head>
+<body>
+
+    <canvas id="matrix-bg"></canvas>
+
+    <div class="music-control">
+        <button id="play-music-btn"><i class="fas fa-play" id="music-icon"></i></button>
+    </div>
+    <div id="youtube-audio-player"></div>
+
+    <div class="container">
+        <header class="profile">
+            <div class="profile-header">
+                <img src="https://via.placeholder.com/150" alt="Logo" class="profile-img">
+                <div class="profile-text-block">
+                    <h1>Abako Gestão</h1>
+                    <p>Financial Intelligence</p>
+                </div>
+            </div>
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/csTn_ikVIOo" title="Video" allowfullscreen></iframe>
+            </div>
+        </header>
+
+        <nav class="links-area">
+            <a href="https://youtube.com" target="_blank" class="link-button link-youtube">
+                <span class="label"><i class="fab fa-youtube"></i> YouTube Channel</span>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+            <a href="https://instagram.com" target="_blank" class="link-button link-instagram">
+                <span class="label"><i class="fab fa-instagram"></i> Official Instagram</span>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+            <a href="https://facebook.com" target="_blank" class="link-button link-facebook">
+                <span class="label"><i class="fab fa-facebook"></i> Business Page</span>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+        </nav>
+
+        <footer>&copy; 2026 Abako Systems. Excellence in Finance.</footer>
+    </div>
+
+    <div class="ads-carousel-viewport">
+        <div class="ads-track" id="adsTrack">
+            <a href="https://meli.la/2wai2Th" target="_blank" class="ad-card">
+                <div class="ad-info">
+                    <div class="ad-icon-box"><i class="fas fa-rocket"></i></div>
+                    <div class="ad-texts">
+                        <h4>Oferta Corporate 2026</h4>
+                        <p>Acesse no Mercado Livre</p>
+                    </div>
+                </div>
+                <div class="ad-cta-btn"><span>Ver</span> <i class="fas fa-arrow-right"></i></div>
+            </a>
+            <a href="https://meli.la/2wai2Th" target="_blank" class="ad-card">
+                <div class="ad-info">
+                    <div class="ad-icon-box"><i class="fas fa-chart-pie"></i></div>
+                    <div class="ad-texts">
+                        <h4>Gestão Premium SaaS</h4>
+                        <p>Condição especial hoje</p>
+                    </div>
+                </div>
+                <div class="ad-cta-btn"><span>Assinar</span> <i class="fas fa-arrow-right"></i></div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        const canvas = document.getElementById('matrix-bg');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        const characters = "01"; 
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(248, 250, 252, 0.1)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#cbd5e1";
+            ctx.font = fontSize + "px monospace";
+            drops.forEach((y, i) => {
+                const text = characters.charAt(Math.floor(Math.random() * characters.length));
+                ctx.fillText(text, i * fontSize, y * fontSize);
+                if (y * fontSize > canvas.height && Math.random() > 0.99) drops[i] = 0;
+                drops[i]++;
+            });
+        }
+        setInterval(drawMatrix, 50);
+
+        let player;
+        let isPlaying = false;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-audio-player', { height: '0', width: '0', videoId: '3ZltabzNSDs', events: { 'onReady': onPlayerReady } });
+        }
+        function onPlayerReady() {
+            const btn = document.getElementById('play-music-btn');
+            const icon = document.getElementById('music-icon');
+            btn.onclick = () => {
+                if (!isPlaying) { player.playVideo(); icon.classList.replace('fa-play', 'fa-pause'); }
+                else { player.pauseVideo(); icon.classList.replace('fa-pause', 'fa-play'); }
+                isPlaying = !isPlaying;
+            };
+        }
+
+        const track = document.getElementById('adsTrack');
+        let currentSlide = 0;
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % 2;
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }, 5000);
+
+        window.onresize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+    </script>
+</body>
+</html>
